@@ -2,6 +2,9 @@ const handleBlogRouter = require('./src/router/blog');
 const handleUserRouter = require('./src/router/user');
 
 const serverHandle = (req,res)=>{
+    const url = req.url;
+    req.path = url.split('?')[0];
+
     //设置返回格式 JSON
     res.setHeader('Content-type','application/json');
 

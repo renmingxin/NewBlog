@@ -1,14 +1,10 @@
-const querystring = require('querystring');
-
 const handleBlogRouter = (req,res)=>{
     const method = req.method //GET or POST
-    const url = req.url;
-    const path = url.split('?')[0];
-    const query = querystring.parse(url.split('?')[1]);
+
 
     //获取博客列表
     if (method === 'GET'){
-        switch (path) {
+        switch (req.path) {
             case '/api/blog/list':
                 return { msg:'博客列表' };
                 break;
@@ -21,7 +17,7 @@ const handleBlogRouter = (req,res)=>{
     }
 
     if (method === 'POST'){
-        switch (path) {
+        switch (req.path) {
             case '/api/blog/new':
                 return { msg:'新建博客' };
                 break;
