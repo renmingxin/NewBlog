@@ -1,28 +1,16 @@
+const { exec } = require('../db/mysql');
+
 const getList = (author, keyWord)=>{
-    // 先返回假数据(格式是正确的)
-    return[
-        {
-            id:1,
-            title:'标题A',
-            content:'内容A',
-            createTime:1583488144296,
-            author:'zhangsan'
-        },
-        {
-            id:2,
-            title:'标题B',
-            content:'内容B',
-            createTime:1583488144296,
-            author:'lisi'
-        },
-        {
-            id:3,
-            title:'标题C',
-            content:'内容c',
-            createTime:1583488144296,
-            author:'lisiC'
-        },
-    ]
+    let sql = `select * from blogs where 1=1 `;
+    if(author){
+        sql += `and author='${author}' `;
+    }
+    if(keyWord){
+        sql += `and title like '%${keyWord}%' `;
+    }
+    sql += ` order by createtime desc`;
+    //返回一个promise
+    return exec(sql);
 };
 const getDetail = (id)=>{
     return {

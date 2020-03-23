@@ -19,8 +19,14 @@ const handleBlogRouter = (req, res) => {
             case '/api/blog/list':
                 const author = req.query.author || '';
                 const keyword = req.query.keyword || '';
-                const listData = getList(author, keyword);
-                return new SuccessModel(listData);
+                // const listData = getList(author, keyword);
+                // return new SuccessModel(listData);
+                const result = getList(author, keyword);
+                return result.then(listData=>{
+                    return new SuccessModel(listData);
+                }).catch(err=>{
+                    return new ErrorModel(err);
+                });
                 break;
 
             case '/api/blog/detail':
