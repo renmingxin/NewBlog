@@ -32,9 +32,13 @@ const handleBlogRouter = (req, res) => {
             case '/api/blog/detail':
                 const id = req.query.id || '';
                 const detailData = getDetail(id);
-                return new SuccessModel(detailData);
+                // return new SuccessModel(detailData);
+                return detailData.then(list=>{
+                    return new SuccessModel(list);
+                }).catch(err=>{
+                    return new ErrorModel(err)
+                });
                 break;
-
             default:
                 break;
         }
@@ -43,18 +47,33 @@ const handleBlogRouter = (req, res) => {
     if (method === 'POST') {
         switch (req.path) {
             case '/api/blog/new':
-                let serverData = newBolg(req.body);
-                return new SuccessModel(serverData);
+                let result = newBolg(req.body);
+                return result.then(data=>{
+                    return new SuccessModel(data);
+                });
                 break;
             case '/api/blog/update':
                 let updateData = updateBolg(id,req.body);
-                return new SuccessModel(updateData);
+                return updateData.then(data=>{
+                    if(data){
+                        return new SuccessModel('更新成功');
+                    }else {
+                        return new ErrorModel('更新失败')
+                    }
+                });
                 break;
             case '/api/blog/del':
                 //body里面的id
                 let reqBodyId = req.body.id;
-                let delData = delBolg(id);
-                return new SuccessModel(delData);
+                const author ='zhangsan';//假数据 学习登录后再改为真实数据
+                let delData = delBolg(id,author);
+                return delData.then(data=>{
+                    if(data){
+                        return new SuccessModel('删除成功');
+                    }else {
+                        return new ErrorModel('删除失败')
+                    }
+                })
                 break;
             default:
                 break;

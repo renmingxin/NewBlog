@@ -12,11 +12,13 @@ const handleUserRouter = (req,res)=>{
             case '/api/user/login':
                 let {username,password} = req.body;
                 let loginData = login(username,password);
-                if (loginData){
-                    return new SuccessModel('登录成功');
-                }else {
-                    return new ErrorModel('登录失败');
-                }
+                return loginData.then(data=>{
+                    if (data.username){
+                        return new SuccessModel('登录成功');
+                    }else {
+                        return new ErrorModel('登录失败');
+                    }
+                });
                 break;
             default:
                 break;

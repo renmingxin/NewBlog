@@ -52,12 +52,20 @@ const serverHandle = (req,res)=>{
         }
 
         //处理user路由
+        // const userData = handleUserRouter(req,res);
+        // if (userData){
+        //     res.end(JSON.stringify(userData));
+        //     return;
+        // }
         const userData = handleUserRouter(req,res);
         if (userData){
-            res.end(JSON.stringify(userData));
+            userData.then(userResult=>{
+                res.end(
+                    JSON.stringify(userResult)
+                )
+            })
             return;
-        }
-
+        };
         //未找到路由 返回404
         res.writeHead(404,{'Content-type':'text/plan'});
         res.write('404 Not Found/\n');
