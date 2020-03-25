@@ -24,6 +24,15 @@ const handleUserRouter = (req,res)=>{
                 break;
         }
     }
+
+    //登录验证的测试
+    if(method === 'GET' && req.path === '/api/user/login-test'){
+        console.log(req.cookie)
+        if (req.cookie.username){
+            return Promise.resolve(new SuccessModel('验证成功')) ;
+        }
+        return Promise.resolve(new ErrorModel('验证失败'));
+    }
 };
 
 module.exports = handleUserRouter;
