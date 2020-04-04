@@ -9,12 +9,12 @@ const handleUserRouter = (req,res)=>{
     const method = req.method //GET or POST
 
     //登录
-    if (method === 'GET'){
+    if (method === 'POST'){
         switch (req.path) {
             case '/api/user/login':
 
-                // let {username,password} = req.body;  POST
-                let {username,password} = req.query;
+                let {username,password} = req.body; // POST
+                // let {username,password} = req.query;//GET
                 let loginData = login(username,password);
                 return loginData.then(data=>{
                     if (data.username){
@@ -32,19 +32,19 @@ const handleUserRouter = (req,res)=>{
         }
     }
 
-    //登录验证的测试
-    if(method === 'GET' && req.path === '/api/user/login-test'){
-        console.log(req.session)
-        if (req.session.username){
-            return Promise.resolve(
-                new SuccessModel({
-                    session:req.session,
-                    msg:'验证成功'
-                })
-            );
-        }
-        return Promise.resolve(new ErrorModel('验证失败'));
-    }
+    // //登录验证的测试
+    // if(method === 'GET' && req.path === '/api/user/login-test'){
+    //     console.log(req.session)
+    //     if (req.session.username){
+    //         return Promise.resolve(
+    //             new SuccessModel({
+    //                 session:req.session,
+    //                 msg:'验证成功'
+    //             })
+    //         );
+    //     }
+    //     return Promise.resolve(new ErrorModel('验证失败'));
+    // }
 };
 
 module.exports = handleUserRouter;

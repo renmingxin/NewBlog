@@ -26,12 +26,12 @@ function get(key) {
             if(val == null){
                 resolve(null);
             }
+            //如果是object 先尝试用JSON.parse返回 如果有错误 就返回原值
             try{
                 resolve(JSON.parse(val))
             }catch (e) {
                 resolve(val)
             }
-            resolve(val);
             // //退出
             // redisClient.quit();
         });
