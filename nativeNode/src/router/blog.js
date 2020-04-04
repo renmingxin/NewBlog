@@ -24,10 +24,16 @@ const handleBlogRouter = (req, res) => {
     if (method === 'GET') {
         switch (req.path) {
             case '/api/blog/list':
-                const author = req.query.author || '';
-                const keyword = req.query.keyword || '';
-                // const listData = getList(author, keyword);
-                // return new SuccessModel(listData);
+                let author = req.query.author || '';
+                let keyword = req.query.keyword || '';
+                if (req.query.isadmin){
+                    //管理员界面
+                    const loginCheckResult = loginCheck(req);
+                    if (loginCheckResult){return loginCheckResult}
+                    //强制查询自己的博客
+                    author = req.session.username;
+                }
+
                 const result = getList(author, keyword);
                 return result.then(listData=>{
                     return new SuccessModel(listData);
@@ -37,6 +43,7 @@ const handleBlogRouter = (req, res) => {
                 break;
 
             case '/api/blog/detail':
+                if (loginCheck(req)){return loginCheck(req)}
                 const id = req.query.id || '';
                 const detailData = getDetail(id);
                 // return new SuccessModel(detailData);
@@ -55,17 +62,16 @@ const handleBlogRouter = (req, res) => {
         switch (req.path) {
             //新建博客
             case '/api/blog/new':
-                const loginCheckResult = loginCheck(req);
                 req.body.author = req.session.username;
                 let result = newBolg(req.body);
-                if (loginCheckResult){return loginCheck}
+                if (loginCheck(req)){return loginCheck(req)}
                 return result.then(data=>{
                     return new SuccessModel(data);
                 });
                 break;
             //更新博客
             case '/api/blog/update':
-                if (loginCheckResult){return loginCheck}
+                if (loginCheck(req)){return loginCheck(req)}
                 let updateData = updateBolg(id,req.body);
 
                 return updateData.then(data=>{
@@ -78,7 +84,7 @@ const handleBlogRouter = (req, res) => {
                 break;
             //删除博客
             case '/api/blog/del':
-                if (loginCheckResult){return loginCheck}
+                if (loginCheck(req)){return loginCheck(req)}
                 //body里面的id
                 let reqBodyId = req.body.id;
                 const author = req.session.username;
